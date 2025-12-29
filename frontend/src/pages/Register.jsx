@@ -19,10 +19,10 @@ export default function Register(){
       if(role === 'student') resp = await registerStudent({name, email, password})
       else resp = await registerTeacher({name, email, password})
 
-      if(resp?.data?.token) saveToken(resp.data.token)
-      navigate(role === 'student' ? '/student-dashboard' : '/student-dashboard')
+      if(resp?.data?.token) saveToken(resp.data.token, role.toUpperCase())
+      navigate(role === 'student' ? '/student-dashboard' : '/teacher-dashboard')
     }catch(err){
-      setError(err.response?.data?.message || String(err))
+      setError(err.response?.data?.message || err.response?.data?.error || String(err))
     }
   }
 

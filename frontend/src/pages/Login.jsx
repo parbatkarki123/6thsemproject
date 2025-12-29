@@ -19,11 +19,14 @@ export default function Login(){
       else if(role === 'teacher') resp = await loginTeacher({email, password})
       else resp = await loginAdmin({email, password})
 
-      if(resp?.data?.token) saveToken(resp.data.token)
+      if(resp?.data?.token) {
+        saveToken(resp.data.token, resp.data.user?.role)
+      }
       if(role === 'admin') navigate('/admin-dashboard')
+      else if(role === 'teacher') navigate('/teacher-dashboard')
       else navigate('/student-dashboard')
     }catch(err){
-      setError(err.response?.data?.message || String(err))
+      setError(err.response?.data?.message || err.response?.data?.error || String(err))
     }
   }
 
@@ -41,10 +44,13 @@ export default function Login(){
         {error && <div className="text-red-600">{error}</div>}
       </AuthForm>
 
-      <div className="text-center mt-4">
-        <span>Don't have an account? </span>
-        <Link to="/register" className="text-blue-600">Register</Link>
-      </div>
+      {role !== 'admin' && (
+        <div className="text-center mt-4">
+          <span>Don't have an account? </span>
+          <Link to="/register" className="text-blue-600">Register</Link>
+        </div>
+      )}
     </div>
   )
 }
+

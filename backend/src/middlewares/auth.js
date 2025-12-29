@@ -12,7 +12,7 @@ export async function requireAuth(req, res, next) {
     const payload = jwt.verify(token, JWT_SECRET)
     if (!payload?.userId) return res.status(401).json({ error: 'Unauthorized' })
 
-    const user = await prisma.user.findUnique({ where: { id: payload.userId }, select: { id: true, name: true, email: true } })
+    const user = await prisma.user.findUnique({ where: { id: payload.userId }, select: { id: true, name: true, email: true, role: true } })
     if (!user) return res.status(401).json({ error: 'Unauthorized' })
 
     req.user = user

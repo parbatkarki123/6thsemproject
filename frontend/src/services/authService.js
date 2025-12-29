@@ -17,28 +17,34 @@ api.interceptors.request.use((config) => {
 })
 
 export async function registerStudent(payload){
-  return api.post('/api/auth/register', payload)
+  return api.post('/api/auth/register', { ...payload, role: 'STUDENT' })
+}
+
+export async function registerTeacher(payload){
+  return api.post('/api/auth/register', { ...payload, role: 'TEACHER' })
 }
 
 export async function loginStudent(payload){
   return api.post('/api/auth/login', payload)
 }
 
-export async function loginAdmin(payload){
-  return api.post('/api/auth/admin/login', payload)
-}
-
 export async function loginTeacher(payload){
   return api.post('/api/auth/teacher/login', payload)
 }
 
-export function saveToken(token){
+export async function loginAdmin(payload){
+  return api.post('/api/auth/admin/login', payload)
+}
+
+export function saveToken(token, role = null){
   localStorage.setItem('auth_token', token)
+  if (role) localStorage.setItem('user_role', role)
   api.defaults.headers.common.Authorization = `Bearer ${token}`
 }
 
 export function clearToken(){
   localStorage.removeItem('auth_token')
+  localStorage.removeItem('user_role')
   delete api.defaults.headers.common.Authorization
 }
 
@@ -46,8 +52,8 @@ export function getToken(){
   return localStorage.getItem('auth_token')
 }
 
-export async function registerTeacher(payload){
-  return api.post('/api/auth/register/teacher', payload)
+export function getRole(){
+  return localStorage.getItem('user_role')
 }
 
 export default api

@@ -8,6 +8,7 @@ import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
 import DashboardStudent from './pages/DashboardStudent.jsx'
 import DashboardAdmin from './pages/DashboardAdmin.jsx'
+import DashboardTeacher from './pages/DashboardTeacher.jsx'
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
             <Route path="/admin-login" element={<AdminLogin />} />
             <Route path="/student-dashboard" element={<DashboardStudent />} />
             <Route path="/admin-dashboard" element={<DashboardAdmin />} />
+            <Route path="/teacher-dashboard" element={<DashboardTeacher />} />
           </Routes>
         </main>
       </div>
