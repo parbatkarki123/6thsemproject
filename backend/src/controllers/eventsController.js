@@ -26,6 +26,26 @@ export async function createEvent(req, res) {
   }
 }
 
+export async function updateEvent(req, res) {
+  try {
+    const user = req.user
+    if (!user || user.role !== 'ADMIN') return res.status(403).json({ error: 'Forbidden' })
+
+    const id = Number(req.params.id)
+    const { title, description, eventDate, venue } = req.body
+    if (!title || !eventDate) return res.status(400).json({ error: 'Title and eventDate are required' })
+
+    const event = await prisma.event.update({
+      where: { id },
+      data: { title, description: description || '', eventDate: new Date(eventDate), venue: venue || '' }
+    })
+    return res.json({ event })
+  } catch (err) {
+    console.error(err)
+    return res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
 export async function deleteEvent(req, res) {
   try {
     const user = req.user
@@ -52,6 +72,38 @@ export async function registerForEvent(req, res) {
 
     const registration = await prisma.registration.create({ data: { userId: user.id, eventId } })
     return res.status(201).json({ registration })
+  } catch (err) {
+    console.error(err)
+    return res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
+export async function getEventRegistrations(req, res) {
+  try {
+    const eventId = Number(req.params.id)
+    const registrations = await prisma.registration.findMany({
+      where: { eventId },
+      include: { user: { select: { id: true, name: true, email: true } } }
+    })
+    return res.json({ registrations })
+  } catch (err) {
+    console.error(err)
+    return res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
+export async function removeStudentFromEvent(req, res) {
+  try {
+    const user = req.user
+    if (!user || user.role !== 'ADMIN') return res.status(403).json({ error: 'Forbidden' })
+
+    const eventId = Number(req.params.eventId)
+    const userId = Number(req.params.userId)
+    
+    await prisma.registration.delete({
+      where: { userId_eventId: { userId, eventId } }
+    })
+    return res.json({ ok: true })
   } catch (err) {
     console.error(err)
     return res.status(500).json({ error: 'Internal server error' })

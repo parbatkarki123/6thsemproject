@@ -17,7 +17,7 @@ export async function register(req, res) {
 
     const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '7d' })
 
-    return res.status(201).json({ user: { id: user.id, name: user.name, email: user.email }, token })
+    return res.status(201).json({ user: { id: user.id, name: user.name, email: user.email, role: user.role }, token })
   } catch (err) {
     console.error(err)
     return res.status(500).json({ error: 'Internal server error' })
