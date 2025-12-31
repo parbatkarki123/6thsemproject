@@ -23,8 +23,8 @@ export default function StudentLogin(){
 
   return (
     <AuthForm title="Student Login" onSubmit={handleSubmit} submitLabel="Login">
-      <input required type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email" className="border p-2 rounded" />
-      <input required type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Password" className="border p-2 rounded" />
+      <input required type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email" className="input" />
+      <input required type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Password" className="input" />
       {error && <div className="text-red-600">{error}</div>}
     </AuthForm>
   )

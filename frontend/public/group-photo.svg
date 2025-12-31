@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+  <defs>
+    <linearGradient id="groupGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#87ceeb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f0f8ff;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="600" height="400" fill="url(#groupGrad)"/>
+  <!-- Group of students -->
+  <!-- Person 1 -->
+  <circle cx="100" cy="120" r="18" fill="#ffdbac"/>
+  <path d="M 82 140 L 118 140 L 115 190 L 85 190 Z" fill="#1e90ff"/>
+  <path d="M 85 190 L 75 220 L 85 220 Z" fill="#ffdbac"/>
+  <path d="M 115 190 L 125 220 L 115 220 Z" fill="#ffdbac"/>
+  <!-- Person 2 -->
+  <circle cx="200" cy="110" r="18" fill="#ffdbac"/>
+  <path d="M 182 130 L 218 130 L 218 185 L 182 185 Z" fill="#ff69b4"/>
+  <path d="M 182 185 L 172 220 L 182 220 Z" fill="#ffdbac"/>
+  <path d="M 218 185 L 228 220 L 218 220 Z" fill="#ffdbac"/>
+  <!-- Person 3 -->
+  <circle cx="300" cy="125" r="18" fill="#ffdbac"/>
+  <path d="M 282 145 L 318 145 L 318 200 L 282 200 Z" fill="#228b22"/>
+  <path d="M 282 200 L 272 230 L 282 230 Z" fill="#ffdbac"/>
+  <path d="M 318 200 L 328 230 L 318 230 Z" fill="#ffdbac"/>
+  <!-- Person 4 -->
+  <circle cx="400" cy="115" r="18" fill="#ffdbac"/>
+  <path d="M 382 135 L 418 135 L 418 190 L 382 190 Z" fill="#ffa500"/>
+  <path d="M 382 190 L 372 220 L 382 220 Z" fill="#ffdbac"/>
+  <path d="M 418 190 L 428 220 L 418 220 Z" fill="#ffdbac"/>
+  <!-- Person 5 -->
+  <circle cx="500" cy="120" r="18" fill="#ffdbac"/>
+  <path d="M 482 140 L 518 140 L 518 195 L 482 195 Z" fill="#87ceeb"/>
+  <path d="M 482 195 L 472 225 L 482 225 Z" fill="#ffdbac"/>
+  <path d="M 518 195 L 528 225 L 518 225 Z" fill="#ffdbac"/>
+  <!-- Shadows -->
+  <ellipse cx="100" cy="235" rx="25" ry="8" fill="#666" opacity="0.3"/>
+  <ellipse cx="200" cy="235" rx="25" ry="8" fill="#666" opacity="0.3"/>
+  <ellipse cx="300" cy="235" rx="25" ry="8" fill="#666" opacity="0.3"/>
+  <ellipse cx="400" cy="235" rx="25" ry="8" fill="#666" opacity="0.3"/>
+  <ellipse cx="500" cy="235" rx="25" ry="8" fill="#666" opacity="0.3"/>
+  <!-- Ground -->
+  <rect y="280" width="600" height="120" fill="#90ee90" opacity="0.5"/>
+  <!-- Title -->
+  <text x="300" y="350" font-size="28" fill="#1e3a8a" text-anchor="middle" font-weight="bold">Team of Participants</text>
+</svg>

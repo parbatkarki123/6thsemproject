@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+  <defs>
+    <linearGradient id="convGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#fff8dc;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f5deb3;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="600" height="400" fill="url(#convGrad)"/>
+  <!-- Decorative banner -->
+  <rect y="0" width="600" height="40" fill="#1e40af"/>
+  <text x="300" y="28" font-size="20" fill="white" text-anchor="middle" font-weight="bold">ANNUAL CONFERENCE 2025</text>
+  <!-- Seating arrangement (circles for heads) -->
+  <!-- Table 1 -->
+  <circle cx="120" cy="140" r="14" fill="#ffdbac"/>
+  <circle cx="180" cy="140" r="14" fill="#ffdbac"/>
+  <circle cx="240" cy="140" r="14" fill="#ffdbac"/>
+  <ellipse cx="180" cy="160" rx="70" ry="25" fill="#f5deb3" stroke="#8b7355" stroke-width="2"/>
+  <!-- Table 2 -->
+  <circle cx="360" cy="140" r="14" fill="#ffdbac"/>
+  <circle cx="420" cy="140" r="14" fill="#ffdbac"/>
+  <circle cx="480" cy="140" r="14" fill="#ffdbac"/>
+  <ellipse cx="420" cy="160" rx="70" ry="25" fill="#f5deb3" stroke="#8b7355" stroke-width="2"/>
+  <!-- Speaker podium -->
+  <rect x="220" y="280" width="160" height="80" fill="#8b4513"/>
+  <rect x="230" y="290" width="140" height="60" fill="#d2b48c"/>
+  <text x="300" y="330" font-size="18" fill="#333" text-anchor="middle" font-weight="bold">SPEAKER</text>
+  <!-- Microphone -->
+  <rect x="298" y="265" width="4" height="20" fill="#333"/>
+  <circle cx="300" cy="262" r="7" fill="#888"/>
+  <!-- Chairs (simple rectangles) -->
+  <rect x="105" y="175" width="30" height="30" fill="#d2691e" rx="3"/>
+  <rect x="165" y="175" width="30" height="30" fill="#d2691e" rx="3"/>
+  <rect x="225" y="175" width="30" height="30" fill="#d2691e" rx="3"/>
+  <rect x="345" y="175" width="30" height="30" fill="#d2691e" rx="3"/>
+  <rect x="405" y="175" width="30" height="30" fill="#d2691e" rx="3"/>
+  <rect x="465" y="175" width="30" height="30" fill="#d2691e" rx="3"/>
+  <!-- Screens/Projector indication -->
+  <rect x="50" y="50" width="120" height="80" fill="#2c3e50" rx="5"/>
+  <text x="110" y="95" font-size="12" fill="#fff" text-anchor="middle">SCREEN</text>
+  <rect x="430" y="50" width="120" height="80" fill="#2c3e50" rx="5"/>
+  <text x="490" y="95" font-size="12" fill="#fff" text-anchor="middle">SCREEN</text>
+</svg>

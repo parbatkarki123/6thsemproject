@@ -40,12 +40,14 @@ export function saveToken(token, role = null){
   localStorage.setItem('auth_token', token)
   if (role) localStorage.setItem('user_role', role)
   api.defaults.headers.common.Authorization = `Bearer ${token}`
+  try{ window.dispatchEvent(new Event('authChange')) }catch(e){}
 }
 
 export function clearToken(){
   localStorage.removeItem('auth_token')
   localStorage.removeItem('user_role')
   delete api.defaults.headers.common.Authorization
+  try{ window.dispatchEvent(new Event('authChange')) }catch(e){}
 }
 
 export function getToken(){

@@ -109,27 +109,27 @@ export default function DashboardAdmin(){
   }
 
   return (
-    <div className="max-w-4xl mx-auto bg-white p-6 rounded shadow">
+    <div className="max-w-4xl mx-auto card">
       <h1 className="text-2xl mb-4">Admin Dashboard</h1>
 
       <form onSubmit={handleAdd} className="mb-6 grid gap-2">
-        <input required value={title} onChange={e=>setTitle(e.target.value)} placeholder="Title" className="border p-2 rounded" />
-        <input value={venue} onChange={e=>setVenue(e.target.value)} placeholder="Venue" className="border p-2 rounded" />
-        <input required type="datetime-local" value={eventDate} onChange={e=>setEventDate(e.target.value)} className="border p-2 rounded" />
-        <textarea value={description} onChange={e=>setDescription(e.target.value)} placeholder="Description" className="border p-2 rounded" />
-        <button type="submit" className="bg-blue-600 text-white px-3 py-1 rounded">Add Event</button>
+        <input required value={title} onChange={e=>setTitle(e.target.value)} placeholder="Title" className="input" />
+        <input value={venue} onChange={e=>setVenue(e.target.value)} placeholder="Venue" className="input" />
+        <input required type="datetime-local" value={eventDate} onChange={e=>setEventDate(e.target.value)} className="input" />
+        <textarea value={description} onChange={e=>setDescription(e.target.value)} placeholder="Description" className="input" />
+        <button type="submit" className="btn">Add Event</button>
       </form>
 
       <h2 className="text-xl mb-2">Events</h2>
       <ul>
         {events.map(ev=> (
-          <li key={ev.id} className="border p-4 rounded mb-2">
+          <li key={ev.id} className="card mb-2">
             {editingId === ev.id ? (
               <div className="grid gap-2">
-                <input value={editTitle} onChange={e=>setEditTitle(e.target.value)} placeholder="Title" className="border p-2 rounded" />
-                <input value={editVenue} onChange={e=>setEditVenue(e.target.value)} placeholder="Venue" className="border p-2 rounded" />
-                <input type="datetime-local" value={editEventDate} onChange={e=>setEditEventDate(e.target.value)} className="border p-2 rounded" />
-                <textarea value={editDescription} onChange={e=>setEditDescription(e.target.value)} placeholder="Description" className="border p-2 rounded" />
+                <input value={editTitle} onChange={e=>setEditTitle(e.target.value)} placeholder="Title" className="input" />
+                <input value={editVenue} onChange={e=>setEditVenue(e.target.value)} placeholder="Venue" className="input" />
+                <input type="datetime-local" value={editEventDate} onChange={e=>setEditEventDate(e.target.value)} className="input" />
+                <textarea value={editDescription} onChange={e=>setEditDescription(e.target.value)} placeholder="Description" className="input" />
                 <div className="flex gap-2">
                   <button onClick={handleSaveEdit} className="bg-green-600 text-white px-3 py-1 rounded">Save</button>
                   <button onClick={()=>setEditingId(null)} className="bg-gray-600 text-white px-3 py-1 rounded">Cancel</button>
@@ -144,12 +144,10 @@ export default function DashboardAdmin(){
                     <div className="text-sm">{ev.description}</div>
                   </div>
                   <div className="flex gap-2">
-                    <button onClick={()=>toggleExpand(ev.id)} className="bg-green-600 text-white px-2 py-1 rounded text-sm">
-                      {expandedEvent === ev.id ? 'Hide' : 'Show'} Students
-                    </button>
-                    <button onClick={()=>startEdit(ev)} className="bg-blue-600 text-white px-2 py-1 rounded text-sm">Edit</button>
-                    <button onClick={()=>handleDelete(ev.id)} className="bg-red-600 text-white px-2 py-1 rounded text-sm">Delete</button>
-                  </div>
+                      <button onClick={()=>toggleExpand(ev.id)} className="btn success">{expandedEvent === ev.id ? 'Hide' : 'Show'} Students</button>
+                      <button onClick={()=>startEdit(ev)} className="btn">Edit</button>
+                      <button onClick={()=>handleDelete(ev.id)} className="btn danger">Delete</button>
+                    </div>
                 </div>
 
                 {expandedEvent === ev.id && (
@@ -158,12 +156,12 @@ export default function DashboardAdmin(){
                     {registrations[ev.id] && registrations[ev.id].length > 0 ? (
                       <ul className="space-y-2">
                         {registrations[ev.id].map(reg=> (
-                          <li key={reg.id} className="flex justify-between items-center bg-gray-100 p-2 rounded">
+                            <li key={reg.id} className="flex justify-between items-center card">
                             <div>
                               <div className="font-semibold">{reg.user.name}</div>
                               <div className="text-sm text-gray-600">{reg.user.email}</div>
                             </div>
-                            <button onClick={()=>handleRemoveStudent(ev.id, reg.user.id)} className="bg-red-600 text-white px-2 py-1 rounded text-sm">Remove</button>
+                              <button onClick={()=>handleRemoveStudent(ev.id, reg.user.id)} className="btn danger">Remove</button>
                           </li>
                         ))}
                       </ul>
@@ -178,8 +176,12 @@ export default function DashboardAdmin(){
         ))}
       </ul>
 
+      <div className="mt-6 flex gap-4 flex-wrap">
+        <img src="/event-auditorium.svg" alt="auditorium" style={{width:300}} />
+        <img src="/conference-event.svg" alt="conference" style={{width:300}} />
+      </div>
       <div className="mt-4">
-        <button onClick={handleLogout} className="bg-gray-700 text-white px-3 py-1 rounded">Logout</button>
+        
       </div>
     </div>
   )

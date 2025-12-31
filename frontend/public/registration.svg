@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+  <rect width="600" height="400" fill="#f3f4f6"/>
+  <defs>
+    <linearGradient id="regGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2563eb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e40af;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect x="80" y="50" width="440" height="280" rx="12" fill="white" stroke="url(#regGrad)" stroke-width="3"/>
+  <text x="300" y="90" font-size="28" fill="#2563eb" text-anchor="middle" font-weight="bold">Register Event</text>
+  <rect x="120" y="140" width="360" height="50" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="135" y="172" font-size="14" fill="#2563eb">Event Title</text>
+  <rect x="120" y="210" width="360" height="50" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="135" y="242" font-size="14" fill="#2563eb">Date & Time</text>
+  <circle cx="520" cy="260" r="35" fill="url(#regGrad)"/>
+  <text x="520" y="270" font-size="24" fill="white" text-anchor="middle" font-weight="bold">→</text>
+</svg>

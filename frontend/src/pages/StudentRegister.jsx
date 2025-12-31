@@ -25,9 +25,9 @@ export default function StudentRegister(){
   return (
     <div>
       <AuthForm title="Student Register" onSubmit={handleSubmit} submitLabel="Register">
-        <input required value={name} onChange={e=>setName(e.target.value)} placeholder="Full name" className="border p-2 rounded" />
-        <input required type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email" className="border p-2 rounded" />
-        <input required type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Password" className="border p-2 rounded" />
+        <input required value={name} onChange={e=>setName(e.target.value)} placeholder="Full name" className="input" />
+        <input required type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email" className="input" />
+        <input required type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Password" className="input" />
         {error && <div className="text-red-600">{error}</div>}
       </AuthForm>
     </div>

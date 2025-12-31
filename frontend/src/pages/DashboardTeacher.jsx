@@ -20,14 +20,14 @@ export default function DashboardTeacher(){
   useEffect(()=>{ load() }, [])
 
   return (
-    <div className="max-w-2xl mx-auto bg-white p-6 rounded shadow">
+    <div className="max-w-2xl mx-auto card">
       <h1 className="text-2xl mb-4">Teacher Dashboard</h1>
       <p>Welcome — here teachers will see events.</p>
 
       <h2 className="text-xl mt-4 mb-2">Upcoming Events</h2>
       <ul>
         {events.map(ev=> (
-          <li key={ev.id} className="border p-2 rounded mb-2">
+          <li key={ev.id} className="card mb-2">
             <div className="font-semibold">{ev.title}</div>
             <div className="text-sm text-gray-600">{new Date(ev.eventDate).toLocaleString()} — {ev.venue}</div>
             <div className="text-sm">{ev.description}</div>
@@ -35,8 +35,13 @@ export default function DashboardTeacher(){
         ))}
       </ul>
 
+      <div className="mt-6 flex gap-4">
+        <img src="/workshop-event.svg" alt="workshop" style={{width:300}} />
+        <img src="/sports-event.svg" alt="sports" style={{width:300}} />
+      </div>
+
       <div className="mt-4">
-        <button onClick={handleLogout} className="bg-gray-700 text-white px-3 py-1 rounded">Logout</button>
+       
       </div>
     </div>
   )

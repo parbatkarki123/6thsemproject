@@ -33,14 +33,14 @@ export default function Login(){
   return (
     <div className="max-w-md mx-auto">
       <div className="mb-4 flex gap-2">
-        <button onClick={()=>setRole('student')} className={`px-3 py-1 rounded ${role==='student'?'bg-blue-600 text-white':''}`}>Student</button>
-        <button onClick={()=>setRole('teacher')} className={`px-3 py-1 rounded ${role==='teacher'?'bg-blue-600 text-white':''}`}>Teacher</button>
-        <button onClick={()=>setRole('admin')} className={`px-3 py-1 rounded ${role==='admin'?'bg-blue-600 text-white':''}`}>Admin</button>
+        <button onClick={()=>setRole('student')} className={role==='student'? 'btn' : 'btn secondary'}>Student</button>
+        <button onClick={()=>setRole('teacher')} className={role==='teacher'? 'btn' : 'btn secondary'}>Teacher</button>
+        <button onClick={()=>setRole('admin')} className={role==='admin'? 'btn' : 'btn secondary'}>Admin</button>
       </div>
 
       <AuthForm title={`${role[0].toUpperCase()+role.slice(1)} Login`} onSubmit={handleSubmit} submitLabel="Login">
-        <input required type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email" className="border p-2 rounded" />
-        <input required type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Password" className="border p-2 rounded" />
+        <input required type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email" className="input" />
+        <input required type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Password" className="input" />
         {error && <div className="text-red-600">{error}</div>}
       </AuthForm>
 

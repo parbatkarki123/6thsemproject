@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#2563eb"/>
+      <stop offset="1" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="8" fill="#f8fafc"/>
+  <g transform="translate(6,6)" fill="none" stroke="url(#g)" stroke-width="1.8">
+    <path d="M2 38v-20l26-8 26 8v20" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M6 18v20"/>
+    <path d="M22 12v24"/>
+    <path d="M38 18v20"/>
+  </g>
+  <circle cx="48" cy="48" r="10" fill="url(#g)" opacity="0.95"/>
+  <text x="4" y="58" font-size="6" fill="#334155" font-family="Arial">College Events</text>
+</svg>

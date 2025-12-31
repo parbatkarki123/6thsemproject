@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+  <defs>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#87ceeb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e0f6ff;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="brickGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#b8860b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b6914;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Sky -->
+  <rect width="600" height="250" fill="url(#skyGrad)"/>
+  <!-- Ground -->
+  <rect y="250" width="600" height="150" fill="#90ee90"/>
+  <!-- Main Building -->
+  <rect x="100" y="100" width="200" height="200" fill="url(#brickGrad)"/>
+  <!-- Windows -->
+  <rect x="130" y="130" width="30" height="30" fill="#87ceeb"/>
+  <rect x="170" y="130" width="30" height="30" fill="#87ceeb"/>
+  <rect x="210" y="130" width="30" height="30" fill="#87ceeb"/>
+  <rect x="130" y="180" width="30" height="30" fill="#87ceeb"/>
+  <rect x="170" y="180" width="30" height="30" fill="#87ceeb"/>
+  <rect x="210" y="180" width="30" height="30" fill="#87ceeb"/>
+  <rect x="130" y="230" width="30" height="30" fill="#87ceeb"/>
+  <rect x="170" y="230" width="30" height="30" fill="#87ceeb"/>
+  <rect x="210" y="230" width="30" height="30" fill="#87ceeb"/>
+  <!-- Door -->
+  <rect x="170" y="260" width="30" height="40" fill="#654321"/>
+  <!-- Side Building -->
+  <rect x="340" y="140" width="160" height="160" fill="#a0522d"/>
+  <rect x="360" y="160" width="25" height="25" fill="#87ceeb"/>
+  <rect x="400" y="160" width="25" height="25" fill="#87ceeb"/>
+  <rect x="440" y="160" width="25" height="25" fill="#87ceeb"/>
+  <rect x="360" y="210" width="25" height="25" fill="#87ceeb"/>
+  <rect x="400" y="210" width="25" height="25" fill="#87ceeb"/>
+  <rect x="440" y="210" width="25" height="25" fill="#87ceeb"/>
+  <!-- Flag pole -->
+  <rect x="190" y="70" width="6" height="40" fill="#333"/>
+  <polygon points="196,75 196,85 210,80" fill="#ff4500"/>
+  <!-- Trees -->
+  <circle cx="50" cy="260" r="30" fill="#228b22"/>
+  <rect x="45" y="280" width="10" height="30" fill="#8b4513"/>
+  <circle cx="530" cy="270" r="35" fill="#228b22"/>
+  <rect x="523" y="290" width="14" height="35" fill="#8b4513"/>
+</svg>

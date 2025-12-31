@@ -29,14 +29,14 @@ export default function Register(){
   return (
     <div className="max-w-md mx-auto">
       <div className="mb-4 flex gap-2">
-        <button onClick={()=>setRole('student')} className={`px-3 py-1 rounded ${role==='student'?'bg-blue-600 text-white':''}`}>Student</button>
-        <button onClick={()=>setRole('teacher')} className={`px-3 py-1 rounded ${role==='teacher'?'bg-blue-600 text-white':''}`}>Teacher</button>
+        <button onClick={()=>setRole('student')} className={role==='student'? 'btn' : 'btn secondary'}>Student</button>
+        <button onClick={()=>setRole('teacher')} className={role==='teacher'? 'btn' : 'btn secondary'}>Teacher</button>
       </div>
 
       <AuthForm title={`Register as ${role}`} onSubmit={handleSubmit} submitLabel="Register">
-        <input required value={name} onChange={e=>setName(e.target.value)} placeholder="Full name" className="border p-2 rounded" />
-        <input required type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email" className="border p-2 rounded" />
-        <input required type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Password" className="border p-2 rounded" />
+        <input required value={name} onChange={e=>setName(e.target.value)} placeholder="Full name" className="input" />
+        <input required type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email" className="input" />
+        <input required type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Password" className="input" />
         {error && <div className="text-red-600">{error}</div>}
       </AuthForm>
     </div>
