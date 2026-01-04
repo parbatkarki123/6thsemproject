@@ -14,7 +14,7 @@ export default function AdminLogin(){
     setError(null)
     try{
       const resp = await loginAdmin({email, password})
-      if(resp?.data?.token) saveToken(resp.data.token)
+      if(resp?.data?.token) saveToken(resp.data.token, resp.data.user?.role)
       navigate('/admin-dashboard')
     }catch(err){
       setError(err.response?.data?.message || String(err))

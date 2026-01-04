@@ -12,6 +12,7 @@ model User {
   email     String   @unique
   password  String
   role      Role
+  isBlocked Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -19,6 +20,9 @@ model User {
   eventsCreated Event[]        @relation("CreatedEvents")
   registrations Registration[]
   certificates  Certificate[]
+  feedbacks     Feedback[]     @relation("UserFeedback")
+  attendances   Attendance[]
+  uploadedTemplates CertificateTemplate[] @relation("UploadedTemplates")
 }
 
 enum Role {
@@ -27,12 +31,19 @@ enum Role {
   STUDENT
 }
 
+enum EventStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model Event {
   id          Int      @id @default(autoincrement())
   title       String
   description String
   eventDate   DateTime
   venue       String
+  status      EventStatus @default(PENDING)
   isCompleted Boolean  @default(false)
   createdAt   DateTime @default(now())
 
@@ -42,6 +53,8 @@ model Event {
 
   registrations Registration[]
   certificates  Certificate[]
+  feedbacks     Feedback[]     @relation("EventFeedback")
+  attendances   Attendance[]
 }
 
 model Registration {
@@ -70,4 +83,53 @@ model Certificate {
   event Event @relation(fields: [eventId], references: [id])
 
   @@unique([userId, eventId])
+}
+
+model Feedback {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  eventId   Int
+  rating    Int      // 1-5 stars
+  comment   String   @db.Text
+  createdAt DateTime @default(now())
+
+  // Relations
+  user  User  @relation("UserFeedback", fields: [userId], references: [id])
+  event Event @relation("EventFeedback", fields: [eventId], references: [id])
+
+  @@unique([userId, eventId]) // One feedback per student per event
+}
+
+model Attendance {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  eventId   Int
+  status    String   @default("ABSENT") // PRESENT / ABSENT
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id])
+  event Event @relation(fields: [eventId], references: [id])
+
+  @@unique([userId, eventId])
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  title     String
+  message   String   @db.Text
+  eventId   Int?     
+  targetAll Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([eventId])
+}
+
+model CertificateTemplate {
+  id        Int      @id @default(autoincrement())
+  fileUrl   String
+  name      String
+  uploadedBy Int
+  createdAt DateTime @default(now())
+
+  uploadedByUser User @relation("UploadedTemplates", fields: [uploadedBy], references: [id])
 }

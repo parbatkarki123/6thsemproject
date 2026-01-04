@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
-import { getToken, clearToken } from './services/authService.js'
+import { Routes, Route, Link, useNavigate } from 'react-router-dom'
+import { getToken, clearToken, getRole } from './services/authService.js'
 import StudentRegister from './pages/StudentRegister.jsx'
 import StudentLogin from './pages/StudentLogin.jsx'
 import AdminLogin from './pages/AdminLogin.jsx'
@@ -14,31 +14,37 @@ import Gallery from './pages/Gallery.jsx'
 
 function App() {
   const [isAuthed, setIsAuthed] = useState(Boolean(getToken()))
+    const [role, setRole] = useState(getRole())
+    const navigate = useNavigate()
 
   useEffect(()=>{
-    function onAuthChange(){ setIsAuthed(Boolean(getToken())) }
+    function onAuthChange(){
+      setIsAuthed(Boolean(getToken()))
+      setRole(getRole())
+    }
     window.addEventListener('authChange', onAuthChange)
+    // initialize role on mount
+    setRole(getRole())
     return ()=> window.removeEventListener('authChange', onAuthChange)
   }, [])
 
   function handleLogout(){
     clearToken()
     setIsAuthed(false)
-    window.location.href = '/'
+    navigate('/')
   }
 
   return (
-    <BrowserRouter>
       <div className="min-h-screen">
         <header className="p-4 header shadow-sm">
           <nav className="container mx-auto flex items-center justify-between">
             <div className="flex items-center gap-6">
-              <Link to="/" className="site-title flex items-center gap-2">
+                <Link to={isAuthed ? (role === 'ADMIN' ? '/admin-dashboard' : role === 'TEACHER' ? '/teacher-dashboard' : '/student-dashboard') : '/'} className="site-title flex items-center gap-2">
                 <img src="/college-hero.svg" alt="logo" style={{width:28,height:28}} />
                 <span>CollegeEvents</span>
               </Link>
               <div className="hidden md:flex gap-6 text-sm text-gray-600">
-                  <Link to="/">Home</Link>
+                    <Link to={isAuthed ? (role === 'ADMIN' ? '/admin-dashboard' : role === 'TEACHER' ? '/teacher-dashboard' : '/student-dashboard') : '/'}>Home</Link>
                   <Link to="/about">About Us</Link>
                   <Link to="/gallery">Gallery</Link>
                 </div>
@@ -81,7 +87,7 @@ function App() {
           </div>
         </footer>
       </div>
-    </BrowserRouter>
+
   )
 }
 

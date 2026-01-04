@@ -15,7 +15,7 @@ export default function StudentRegister(){
     setError(null)
     try{
       const resp = await registerStudent({name, email, password})
-      if(resp?.data?.token) saveToken(resp.data.token)
+      if(resp?.data?.token) saveToken(resp.data.token, resp.data.user?.role)
       navigate('/student-dashboard')
     }catch(err){
       setError(err.response?.data?.message || String(err))

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { clearToken } from '../services/authService.js'
-import { getEvents, createEvent, updateEvent, deleteEvent, getEventRegistrations, removeStudentFromEvent } from '../services/eventService.js'
+import { getEvents, adminListEvents, createEvent, updateEvent, deleteEvent, getEventRegistrations, removeStudentFromEvent, uploadCertificateTemplate, generateCertificates, exportEventReportExcel, adminApproveEvent, adminRejectEvent, adminCompleteEvent } from '../services/eventService.js'
 
 export default function DashboardAdmin(){
   const navigate = useNavigate()
@@ -24,7 +24,7 @@ export default function DashboardAdmin(){
   }
 
   async function load(){
-    const resp = await getEvents()
+    const resp = await adminListEvents()
     setEvents(resp.data.events || [])
   }
 
@@ -147,6 +147,17 @@ export default function DashboardAdmin(){
                       <button onClick={()=>toggleExpand(ev.id)} className="btn success">{expandedEvent === ev.id ? 'Hide' : 'Show'} Students</button>
                       <button onClick={()=>startEdit(ev)} className="btn">Edit</button>
                       <button onClick={()=>handleDelete(ev.id)} className="btn danger">Delete</button>
+                      <button onClick={async ()=>{ try{ const resp=await generateCertificates(ev.id); alert('Certificates generated: '+ (resp.data.generated?.length||0)) }catch(e){ alert(e.response?.data?.error || e.message) } }} className="btn">Generate Certificates</button>
+                      <button onClick={async ()=>{ try{ const resp=await exportEventReportExcel(ev.id); const url=window.URL.createObjectURL(new Blob([resp.data])); const a=document.createElement('a'); a.href=url; a.download=`event_${ev.id}_registrations.xlsx`; document.body.appendChild(a); a.click(); a.remove() }catch(e){ alert(e.response?.data?.error || e.message) } }} className="btn">Download XLSX</button>
+                      {ev.status === 'PENDING' && ev.createdBy?.role === 'TEACHER' && (
+                        <>
+                          <button onClick={async ()=>{ try{ await adminApproveEvent(ev.id); alert('Event approved'); await load() }catch(e){ alert(e.response?.data?.error || e.message) } }} className="btn success">Approve</button>
+                          <button onClick={async ()=>{ try{ await adminRejectEvent(ev.id); alert('Event rejected'); await load() }catch(e){ alert(e.response?.data?.error || e.message) } }} className="btn danger">Reject</button>
+                        </>
+                      )}
+                      {ev.status === 'APPROVED' && !ev.isCompleted && (
+                        <button onClick={async ()=>{ try{ await adminCompleteEvent(ev.id); alert('Event completed'); await load() }catch(e){ alert(e.response?.data?.error || e.message) } }} className="btn warning">Complete Event</button>
+                      )}
                     </div>
                 </div>
 
@@ -180,9 +191,38 @@ export default function DashboardAdmin(){
         <img src="/event-auditorium.svg" alt="auditorium" style={{width:300}} />
         <img src="/conference-event.svg" alt="conference" style={{width:300}} />
       </div>
-      <div className="mt-4">
-        
+      <div className="mt-8 bg-white p-4 rounded shadow">
+        <h2 className="text-lg font-semibold mb-2">Certificate Template Upload</h2>
+        <TemplateUploader />
       </div>
     </div>
+  )
+}
+
+function TemplateUploader(){
+  const [file, setFile] = useState(null)
+  const [loading, setLoading] = useState(false)
+
+  async function handleUpload(e){
+    e.preventDefault()
+    if(!file) return alert('Select a file')
+    try{
+      setLoading(true)
+      const fd = new FormData()
+      fd.append('file', file)
+      await uploadCertificateTemplate(fd)
+      alert('Template uploaded')
+      setFile(null)
+      e.target.reset && e.target.reset()
+    }catch(err){
+      alert(err.response?.data?.error || err.message)
+    }finally{ setLoading(false) }
+  }
+
+  return (
+    <form onSubmit={handleUpload} className="flex gap-2 items-center">
+      <input type="file" accept=".pdf,.png,.jpg,.jpeg" onChange={e=>setFile(e.target.files[0])} />
+      <button type="submit" className="btn" disabled={loading}>{loading? 'Uploading...' : 'Upload Template'}</button>
+    </form>
   )
 }
