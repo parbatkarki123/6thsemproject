@@ -408,3 +408,111 @@ export async function generateCertificatesForEvent(req, res) {
     return res.status(500).json({ error: 'Internal server error' })
   }
 }
+
+// ========== Gallery Image Management ==========
+export async function uploadGalleryImage(req, res) {
+  try {
+    const user = req.user
+    if (!user || (user.role !== 'ADMIN' && user.role !== 'TEACHER')) {
+      return res.status(403).json({ error: 'Forbidden - Only admins and teachers can upload images' })
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ error: 'No image file provided' })
+    }
+
+    const { title, description } = req.body
+    const filename = `${Date.now()}-${req.file.originalname}`
+    const galleryDir = path.join(process.cwd(), 'uploads', 'gallery')
+    
+    // Ensure gallery directory exists
+    if (!fs.existsSync(galleryDir)) {
+      fs.mkdirSync(galleryDir, { recursive: true })
+    }
+
+    const uploadPath = path.join(galleryDir, filename)
+    
+    // Move file to gallery directory
+    try {
+      fs.renameSync(req.file.path, uploadPath)
+    } catch (err) {
+      console.error('File move error:', err)
+      // Fallback: copy the file if rename fails
+      fs.copyFileSync(req.file.path, uploadPath)
+      fs.unlinkSync(req.file.path)
+    }
+
+    // Create database entry
+    const image = await prisma.galleryImage.create({
+      data: {
+        imageUrl: `/uploads/gallery/${filename}`,
+        title: title || 'Untitled',
+        description: description || '',
+        uploadedBy: user.id
+      },
+      include: {
+        uploadedByUser: {
+          select: { id: true, name: true, role: true }
+        }
+      }
+    })
+
+    return res.status(201).json({ image })
+  } catch (err) {
+    console.error(err)
+    return res.status(500).json({ error: 'Internal server error: ' + err.message })
+  }
+}
+
+export async function getGalleryImages(req, res) {
+  try {
+    const images = await prisma.galleryImage.findMany({
+      orderBy: { createdAt: 'desc' },
+      include: {
+        uploadedByUser: {
+          select: { id: true, name: true, role: true }
+        }
+      }
+    })
+
+    return res.json({ images })
+  } catch (err) {
+    console.error(err)
+    return res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
+export async function deleteGalleryImage(req, res) {
+  try {
+    const user = req.user
+    if (!user || (user.role !== 'ADMIN' && user.role !== 'TEACHER')) {
+      return res.status(403).json({ error: 'Forbidden' })
+    }
+
+    const id = Number(req.params.id)
+    const image = await prisma.galleryImage.findUnique({ where: { id } })
+
+    if (!image) {
+      return res.status(404).json({ error: 'Image not found' })
+    }
+
+    // Only allow admins or the uploader to delete
+    if (user.role !== 'ADMIN' && image.uploadedBy !== user.id) {
+      return res.status(403).json({ error: 'Forbidden - You can only delete your own images' })
+    }
+
+    // Delete file from filesystem
+    const filePath = path.join(image.imageUrl.replace(/^\//, ''))
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath)
+    }
+
+    // Delete from database
+    await prisma.galleryImage.delete({ where: { id } })
+
+    return res.json({ message: 'Image deleted successfully' })
+  } catch (err) {
+    console.error(err)
+    return res.status(500).json({ error: 'Internal server error' })
+  }
+}

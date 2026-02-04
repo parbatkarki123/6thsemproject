@@ -23,6 +23,7 @@ model User {
   feedbacks     Feedback[]     @relation("UserFeedback")
   attendances   Attendance[]
   uploadedTemplates CertificateTemplate[] @relation("UploadedTemplates")
+  galleryImages GalleryImage[] @relation("GalleryImages")
 }
 
 enum Role {
@@ -133,3 +134,16 @@ model CertificateTemplate {
 
   uploadedByUser User @relation("UploadedTemplates", fields: [uploadedBy], references: [id])
 }
+
+model GalleryImage {
+  id        Int      @id @default(autoincrement())
+  imageUrl  String
+  title     String?
+  description String? @db.Text
+  uploadedBy Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  uploadedByUser User @relation("GalleryImages", fields: [uploadedBy], references: [id])
+}
+

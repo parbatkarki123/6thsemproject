@@ -4,7 +4,8 @@ import {
   adminListEvents, adminCreateEvent, adminUpdateEvent, adminDeleteEvent, adminApproveEvent, adminRejectEvent, adminCompleteEvent,
   createTeacherAccount, deleteTeacherAccount, blockStudent, unblockStudent, resetUserPassword,
   analyticsSummary, uploadCertificateTemplate, sendNotification, getNotificationsForUser,
-  markAttendance, eventParticipationReport, studentParticipationReport
+  markAttendance, eventParticipationReport, studentParticipationReport,
+  uploadGalleryImage, getGalleryImages, deleteGalleryImage
 } from '../controllers/adminController.js'
 import { generateCertificatesForEvent, exportEventReportExcel, exportEventReportPDF } from '../controllers/adminController.js'
 import { requireAuth, requireRole } from '../middlewares/auth.js'
@@ -41,6 +42,11 @@ router.get('/notifications', requireAuth, getNotificationsForUser)
 // Attendance
 router.post('/attendance', requireAuth, requireRole('ADMIN'), markAttendance)
 router.post('/certificates/generate/:id', requireAuth, requireRole('ADMIN'), generateCertificatesForEvent)
+
+// Gallery Images
+router.post('/gallery', requireAuth, upload.single('image'), uploadGalleryImage)
+router.get('/gallery', getGalleryImages)
+router.delete('/gallery/:id', requireAuth, deleteGalleryImage)
 
 // Report exports
 router.get('/reports/event/:id/excel', requireAuth, requireRole('ADMIN'), exportEventReportExcel)

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { clearToken } from '../services/authService.js'
-import { getEvents, adminListEvents, createEvent, updateEvent, deleteEvent, getEventRegistrations, removeStudentFromEvent, uploadCertificateTemplate, generateCertificates, exportEventReportExcel, adminApproveEvent, adminRejectEvent, adminCompleteEvent } from '../services/eventService.js'
+import { getEvents, adminListEvents, createEvent, updateEvent, deleteEvent, getEventRegistrations, removeStudentFromEvent, uploadCertificateTemplate, generateCertificates, exportEventReportExcel, adminApproveEvent, adminRejectEvent, adminCompleteEvent, uploadAdminGalleryImage, getAdminGalleryImages, deleteAdminGalleryImage } from '../services/eventService.js'
 
 export default function DashboardAdmin(){
   const navigate = useNavigate()
@@ -17,6 +17,7 @@ export default function DashboardAdmin(){
   const [editDescription, setEditDescription] = useState('')
   const [editEventDate, setEditEventDate] = useState('')
   const [editVenue, setEditVenue] = useState('')
+  const [galleryRefreshKey, setGalleryRefreshKey] = useState(0)
 
   function handleLogout(){
     clearToken()
@@ -195,6 +196,16 @@ export default function DashboardAdmin(){
         <h2 className="text-lg font-semibold mb-2">Certificate Template Upload</h2>
         <TemplateUploader />
       </div>
+
+      <div className="mt-8 bg-white p-4 rounded shadow">
+        <h2 className="text-lg font-semibold mb-2">Gallery Image Upload</h2>
+        <GalleryImageUploader onUploadSuccess={()=>{ setGalleryRefreshKey((k)=>k+1) }} />
+      </div>
+
+      <div className="mt-8 bg-white p-4 rounded shadow">
+        <h2 className="text-lg font-semibold mb-2">Manage Gallery Images</h2>
+        <AdminGalleryManager refreshKey={galleryRefreshKey} />
+      </div>
     </div>
   )
 }
@@ -224,5 +235,132 @@ function TemplateUploader(){
       <input type="file" accept=".pdf,.png,.jpg,.jpeg" onChange={e=>setFile(e.target.files[0])} />
       <button type="submit" className="btn" disabled={loading}>{loading? 'Uploading...' : 'Upload Template'}</button>
     </form>
+  )
+}
+
+function GalleryImageUploader({ onUploadSuccess }){
+  const [file, setFile] = useState(null)
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  async function handleUpload(e){
+    e.preventDefault()
+    setError('')
+    if(!file) {
+      setError('Please select an image file')
+      return
+    }
+    try{
+      setLoading(true)
+      const fd = new FormData()
+      fd.append('image', file)
+      fd.append('title', title || 'Untitled')
+      fd.append('description', description)
+
+      await uploadAdminGalleryImage(fd)
+      alert('Image uploaded successfully!')
+      setFile(null)
+      setTitle('')
+      setDescription('')
+      setError('')
+      e.target.reset && e.target.reset()
+      if(onUploadSuccess) onUploadSuccess()
+    }catch(err){
+      console.error('Upload error:', err)
+      const msg = err.response?.data?.error || err.message || 'Error uploading image'
+      setError(msg)
+    }finally{ 
+      setLoading(false) 
+    }
+  }
+
+  return (
+    <form onSubmit={handleUpload} className="grid gap-2">
+      {error && <div className="text-red-600 text-sm bg-red-100 p-2 rounded">{error}</div>}
+      <input 
+        type="file" 
+        accept="image/*" 
+        onChange={e=>setFile(e.target.files[0])} 
+        required 
+        className="input"
+      />
+      <input 
+        type="text"
+        value={title}
+        onChange={e=>setTitle(e.target.value)}
+        placeholder="Image Title (optional)"
+        className="input"
+      />
+      <textarea 
+        value={description}
+        onChange={e=>setDescription(e.target.value)}
+        placeholder="Image Description (optional)"
+        className="input"
+      />
+      <button type="submit" className="btn" disabled={loading}>
+        {loading? 'Uploading...' : 'Upload Image'}
+      </button>
+    </form>
+  )
+}
+
+function AdminGalleryManager({ refreshKey }){
+  const [images, setImages] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  async function loadImages(){
+    try{
+      setLoading(true)
+      setError('')
+      const resp = await getAdminGalleryImages()
+      setImages(resp.data.images || [])
+    }catch(err){
+      console.error('Failed to load images', err)
+      const msg = err.response?.data?.error || err.message || 'Failed to load images'
+      setError(msg)
+    }finally{ setLoading(false) }
+  }
+
+  useEffect(()=>{ loadImages() }, [])
+  useEffect(()=>{ loadImages() }, [refreshKey])
+
+  async function handleDelete(id){
+    if(!confirm('Are you sure you want to delete this image?')) return
+    try{
+      await deleteAdminGalleryImage(id)
+      setImages(prev => prev.filter(img => img.id !== id))
+    }catch(err){
+      console.error('Delete failed', err)
+      alert(err.response?.data?.error || err.message || 'Failed to delete')
+    }
+  }
+
+  if(loading){
+    return <div>Loading images...</div>
+  }
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {error && <div className="text-red-600 text-sm bg-red-100 p-2 rounded col-span-full">{error}</div>}
+      {images.length > 0 ? (
+        images.map(image => (
+          <div key={image.id} className="card">
+            <img src={image.imageUrl} alt={image.title || 'gallery-image'} className="w-full rounded" />
+            <div className="mt-2 flex items-center justify-between">
+              <div>
+                {image.title && <p className="text-sm font-semibold">{image.title}</p>}
+                {image.description && <p className="text-xs text-gray-600">{image.description}</p>}
+              </div>
+              <button className="btn btn-danger" onClick={()=>handleDelete(image.id)}>Delete</button>
+            </div>
+          </div>
+        ))
+      ) : (
+        <p className="col-span-full text-center text-gray-500">No images uploaded yet</p>
+      )}
+    </div>
   )
 }

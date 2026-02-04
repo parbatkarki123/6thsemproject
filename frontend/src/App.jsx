@@ -34,24 +34,28 @@ function App() {
     navigate('/')
   }
 
+  const dashboardPath = role === 'ADMIN' ? '/admin-dashboard' : role === 'TEACHER' ? '/teacher-dashboard' : '/student-dashboard'
   return (
       <div className="min-h-screen">
-        <header className="p-4 header shadow-sm">
+        <header className="p-4 header shadow-sm sticky top-0 z-50">
           <nav className="container mx-auto flex items-center justify-between">
             <div className="flex items-center gap-6">
-                <Link to={isAuthed ? (role === 'ADMIN' ? '/admin-dashboard' : role === 'TEACHER' ? '/teacher-dashboard' : '/student-dashboard') : '/'} className="site-title flex items-center gap-2">
+                <Link to={'/'} className="site-title flex items-center gap-2">
                 <img src="/college-hero.svg" alt="logo" style={{width:28,height:28}} />
                 <span>CollegeEvents</span>
               </Link>
-              <div className="hidden md:flex gap-6 text-sm text-gray-600">
-                    <Link to={isAuthed ? (role === 'ADMIN' ? '/admin-dashboard' : role === 'TEACHER' ? '/teacher-dashboard' : '/student-dashboard') : '/'}>Home</Link>
-                  <Link to="/about">About Us</Link>
+              <div className="hidden md:flex gap-8 text-sm text-gray-600">
+                    <Link to={'/'}>Home</Link>
                   <Link to="/gallery">Gallery</Link>
+                  <Link to="/about">About</Link>
                 </div>
             </div>
-            <div>
+            <div className="flex items-center gap-3">
               {isAuthed ? (
-                <button onClick={handleLogout} className="btn">Logout</button>
+                <>
+                  <Link to={dashboardPath} className="btn">Dashboard</Link>
+                  <button onClick={handleLogout} className="btn ghost">Logout</button>
+                </>
               ) : (
                 <Link to="/login" className="btn">Login</Link>
               )}

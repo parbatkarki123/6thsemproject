@@ -132,4 +132,17 @@ export async function adminCompleteEvent(eventId){
   return api.post(`/api/admin/events/${eventId}/complete`)
 }
 
-export default { getEvents, createEvent, updateEvent, deleteEvent, registerEvent, getEventRegistrations, removeStudentFromEvent, submitEventRequest, getTeacherRequests, getTeacherApprovedEvents, getEventStudents, downloadParticipantList, getApprovedEvents, registerForApprovedEvent, cancelEventRegistration, getRegistrationStatus, getStudentRegisteredEvents, getStudentCompletedEvents, getStudentCertificates, downloadCertificate, submitFeedback, getStudentFeedback, getEventFeedback, getAllFeedback, uploadCertificateTemplate, generateCertificates, exportEventReportExcel, exportEventReportPDF, adminApproveEvent, adminRejectEvent, adminListEvents, adminCompleteEvent }
+// Admin Gallery management
+export async function uploadAdminGalleryImage(formData){
+  return api.post('/api/admin/gallery', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+}
+
+export async function getAdminGalleryImages(){
+  return api.get('/api/admin/gallery')
+}
+
+export async function deleteAdminGalleryImage(id){
+  return api.delete(`/api/admin/gallery/${id}`)
+}
+
+export default { getEvents, createEvent, updateEvent, deleteEvent, registerEvent, getEventRegistrations, removeStudentFromEvent, submitEventRequest, getTeacherRequests, getTeacherApprovedEvents, getEventStudents, downloadParticipantList, getApprovedEvents, registerForApprovedEvent, cancelEventRegistration, getRegistrationStatus, getStudentRegisteredEvents, getStudentCompletedEvents, getStudentCertificates, downloadCertificate, submitFeedback, getStudentFeedback, getEventFeedback, getAllFeedback, uploadCertificateTemplate, generateCertificates, exportEventReportExcel, exportEventReportPDF, adminApproveEvent, adminRejectEvent, adminListEvents, adminCompleteEvent, uploadAdminGalleryImage, getAdminGalleryImages, deleteAdminGalleryImage }
