@@ -22,9 +22,7 @@ export default function Login(){
       if(resp?.data?.token) {
         saveToken(resp.data.token, resp.data.user?.role)
       }
-      if(role === 'admin') navigate('/admin-dashboard')
-      else if(role === 'teacher') navigate('/teacher-dashboard')
-      else navigate('/student-dashboard')
+      navigate('/')
     }catch(err){
       setError(err.response?.data?.message || err.response?.data?.error || String(err))
     }

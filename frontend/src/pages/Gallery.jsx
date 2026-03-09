@@ -27,16 +27,24 @@ export default function Gallery(){
       setError(err.message)
       // Fallback to static images if API fails
       setImages([
-        { id: 1, imageUrl: '/real-campus.svg', title: 'Campus' },
-        { id: 2, imageUrl: '/event-auditorium.svg', title: 'Auditorium' },
-        { id: 3, imageUrl: '/workshop-event.svg', title: 'Workshop' },
-        { id: 4, imageUrl: '/group-photo.svg', title: 'Group Photo' },
-        { id: 5, imageUrl: '/conference-event.svg', title: 'Conference' },
-        { id: 6, imageUrl: '/sports-event.svg', title: 'Sports' }
+        { id: 1, imageUrl: '/real-campus.jpg', title: 'Campus' },
+        { id: 2, imageUrl: 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=800&q=80', title: 'Auditorium' },
+        { id: 3, imageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80', title: 'Workshop' },
+        { id: 4, imageUrl: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80', title: 'Group Photo' },
+        { id: 5, imageUrl: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80', title: 'Conference' },
+        { id: 6, imageUrl: 'https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=800&q=80', title: 'Sports' }
       ])
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleImageError = (id, fallbackUrl) => {
+    setImages(prevImages => 
+      prevImages.map(img => 
+        img.id === id ? { ...img, imageUrl: fallbackUrl, errorHandled: true } : img
+      )
+    )
   }
 
   if (loading) {
@@ -51,7 +59,25 @@ export default function Gallery(){
         {images.length > 0 ? (
           images.map((image) => (
             <div key={image.id} className="card">
-              <img src={image.imageUrl} alt={image.title || 'gallery-image'} className="w-full rounded" />
+              <div className="w-full h-48 bg-gray-100 rounded overflow-hidden">
+                <img 
+                  src={image.imageUrl} 
+                  alt="" 
+                  onError={(e) => {
+                    if (!image.errorHandled) {
+                      const fallbacks = {
+                        2: '/event-auditorium.svg',
+                        3: '/workshop-event.svg',
+                        4: '/group-photo.svg',
+                        5: '/conference-event.svg',
+                        6: '/sports-event.svg'
+                      }
+                      handleImageError(image.id, fallbacks[image.id] || '/real-campus.jpg')
+                    }
+                  }}
+                  className="w-full h-full object-cover" 
+                />
+              </div>
               {image.title && <p className="mt-2 text-sm font-semibold">{image.title}</p>}
               {image.description && <p className="text-xs text-gray-600">{image.description}</p>}
             </div>

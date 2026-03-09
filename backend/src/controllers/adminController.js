@@ -98,7 +98,48 @@ export async function adminCompleteEvent(req, res) {
 
     const id = Number(req.params.id)
     const event = await prisma.event.update({ where: { id }, data: { isCompleted: true } })
-    return res.json({ event })
+
+    // Automatically generate certificates for all registered students
+    const registrations = await prisma.registration.findMany({ where: { eventId: id }, include: { user: true } })
+    
+    if (registrations.length > 0) {
+      const outDir = path.join(process.cwd(), 'uploads', 'certificates')
+      if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true })
+
+      for (const reg of registrations) {
+        const doc = new PDFDocument({ size: 'A4', margin: 50 })
+        const filename = `certificate_event_${id}_user_${reg.userId}.pdf`
+        const filePath = path.join(outDir, filename)
+        const stream = fs.createWriteStream(filePath)
+        doc.pipe(stream)
+
+        doc.fontSize(24).text('Certificate of Participation', { align: 'center' })
+        doc.moveDown(2)
+        doc.fontSize(18).text(`This is to certify that`, { align: 'center' })
+        doc.moveDown()
+        doc.fontSize(22).text(reg.user.name, { align: 'center', underline: true })
+        doc.moveDown()
+        doc.fontSize(16).text(`has participated in ${event.title} on ${new Date(event.eventDate).toLocaleDateString()}`, { align: 'center' })
+        doc.moveDown(4)
+        doc.fontSize(12).text(`Issued by Admin`, { align: 'right' })
+
+        doc.end()
+
+        await new Promise((resolve, reject) => {
+          stream.on('finish', resolve)
+          stream.on('error', reject)
+        })
+
+        const fileUrl = `/uploads/certificates/${filename}`
+        await prisma.certificate.upsert({ 
+          where: { userId_eventId: { userId: reg.userId, eventId: id } }, 
+          update: { fileUrl, issuedAt: new Date() }, 
+          create: { userId: reg.userId, eventId: id, fileUrl } 
+        })
+      }
+    }
+
+    return res.json({ event, certificatesGenerated: registrations.length })
   } catch (err) {
     console.error(err)
     return res.status(500).json({ error: 'Internal server error' })

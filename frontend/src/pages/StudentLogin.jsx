@@ -15,7 +15,7 @@ export default function StudentLogin(){
     try{
       const resp = await loginStudent({email, password})
       if(resp?.data?.token) saveToken(resp.data.token, resp.data.user?.role)
-      navigate('/student-dashboard')
+      navigate('/')
     }catch(err){
       setError(err.response?.data?.message || String(err))
     }

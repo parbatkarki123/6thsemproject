@@ -101,7 +101,7 @@ export default function DashboardTeacher(){
     <div className="max-w-4xl mx-auto p-4">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Teacher Dashboard</h1>
-        <button onClick={handleLogout} className="px-4 py-2 bg-red-500 text-white rounded">Logout</button>
+
       </div>
 
       {error && <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">{error}</div>}

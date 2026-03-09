@@ -1,4 +1,6 @@
 import { prisma } from '../lib/prisma.js'
+import path from 'path'
+import fs from 'fs'
 
 // ============ Event Registration System ============
 
@@ -139,7 +141,10 @@ export async function getStudentCompletedEvents(req, res) {
             eventDate: true, 
             venue: true,
             isCompleted: true,
-            createdBy: { select: { id: true, name: true } }
+            createdBy: { select: { id: true, name: true } },
+            certificates: {
+              where: { userId: user.id }
+            }
           } 
         } 
       }
@@ -176,7 +181,7 @@ export async function getStudentCertificates(req, res) {
   }
 }
 
-// Student: Download certificate (mock - return file URL)
+// Student: Download certificate
 export async function downloadCertificate(req, res) {
   try {
     const user = req.user
@@ -191,8 +196,16 @@ export async function downloadCertificate(req, res) {
     if (!cert) return res.status(404).json({ error: 'Certificate not found' })
     if (cert.userId !== user.id) return res.status(403).json({ error: 'Forbidden' })
 
-    // In production, download the file from fileUrl or storage service
-    return res.json({ downloadUrl: cert.fileUrl, eventTitle: cert.event.title })
+    // Build absolute path to file
+    // fileUrl is like "/uploads/certificates/filename.pdf"
+    const filePath = path.join(process.cwd(), cert.fileUrl.replace(/^\//, ''))
+
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ error: 'Certificate file not found on server' })
+    }
+
+    const downloadName = `${cert.event.title.replace(/[^a-z0-9]/gi, '_')}_Certificate.pdf`
+    return res.download(filePath, downloadName)
   } catch (err) {
     console.error(err)
     return res.status(500).json({ error: 'Internal server error' })

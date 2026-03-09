@@ -189,8 +189,20 @@ export default function DashboardAdmin(){
       </ul>
 
       <div className="mt-6 flex gap-4 flex-wrap">
-        <img src="/event-auditorium.svg" alt="auditorium" style={{width:300}} />
-        <img src="/conference-event.svg" alt="conference" style={{width:300}} />
+        <img 
+          src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=600&q=80" 
+          alt="auditorium" 
+          onError={(e) => { e.target.src = "/event-auditorium.svg"; e.target.onerror = null; }}
+          className="rounded shadow" 
+          style={{width:300, height:200, objectFit:'cover'}} 
+        />
+        <img 
+          src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80" 
+          alt="conference" 
+          onError={(e) => { e.target.src = "/conference-event.svg"; e.target.onerror = null; }}
+          className="rounded shadow" 
+          style={{width:300, height:200, objectFit:'cover'}} 
+        />
       </div>
       <div className="mt-8 bg-white p-4 rounded shadow">
         <h2 className="text-lg font-semibold mb-2">Certificate Template Upload</h2>

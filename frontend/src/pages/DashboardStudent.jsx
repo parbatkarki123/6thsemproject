@@ -125,11 +125,19 @@ export default function DashboardStudent(){
     }
   }
 
-  async function handleDownloadCertificate(certId){
+  async function handleDownloadCertificate(certId, eventTitle = 'Certificate'){
     try {
       const resp = await downloadCertificate(certId)
-      // For demo, just show the URL
-      alert('Certificate URL: ' + resp.data.downloadUrl)
+      
+      // Handle blob download
+      const url = window.URL.createObjectURL(new Blob([resp.data]))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', `${eventTitle.replace(/[^a-z0-9]/gi, '_')}_Certificate.pdf`)
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      window.URL.revokeObjectURL(url)
     } catch (err) {
       setError('Failed to download: ' + (err.response?.data?.error || err.message))
     }
@@ -174,7 +182,7 @@ export default function DashboardStudent(){
     <div className="max-w-5xl mx-auto p-4">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Student Dashboard</h1>
-        <button onClick={handleLogout} className="px-4 py-2 bg-red-500 text-white rounded">Logout</button>
+
       </div>
 
       {error && <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">{error}</div>}
@@ -330,7 +338,7 @@ export default function DashboardStudent(){
                         View
                       </button>
                       <button
-                        onClick={() => handleDownloadCertificate(cert.id)}
+                        onClick={() => handleDownloadCertificate(cert.id, cert.event.title)}
                         className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600"
                       >
                         Download
@@ -441,7 +449,7 @@ export default function DashboardStudent(){
               </button>
               <button
                 onClick={() => {
-                  handleDownloadCertificate(viewingCertificate.id)
+                  handleDownloadCertificate(viewingCertificate.id, viewingCertificate.event.title)
                   setViewingCertificate(null)
                 }}
                 className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600"

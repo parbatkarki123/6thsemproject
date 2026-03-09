@@ -41,23 +41,24 @@ function App() {
           <nav className="container mx-auto flex items-center justify-between">
             <div className="flex items-center gap-6">
                 <Link to={'/'} className="site-title flex items-center gap-2">
-                <img src="/college-hero.svg" alt="logo" style={{width:28,height:28}} />
+                <img src="/real-campus.jpg" alt="logo" style={{width:28,height:28}} />
                 <span>CollegeEvents</span>
               </Link>
               <div className="hidden md:flex gap-8 text-sm text-gray-600">
                     <Link to={'/'}>Home</Link>
-                  <Link to="/gallery">Gallery</Link>
-                  <Link to="/about">About</Link>
+                    {isAuthed && <Link to={dashboardPath}>Dashboard</Link>}
+                    <Link to="/gallery">Gallery</Link>
+                    <Link to="/about">About</Link>
                 </div>
             </div>
             <div className="flex items-center gap-3">
               {isAuthed ? (
                 <>
-                  <Link to={dashboardPath} className="btn">Dashboard</Link>
+                  {/* Dashboard link moved to main navbar */}
                   <button onClick={handleLogout} className="btn ghost">Logout</button>
                 </>
               ) : (
-                <Link to="/login" className="btn">Login</Link>
+                <Link to="/login" className="btn ghost">Login</Link>
               )}
             </div>
           </nav>
@@ -66,7 +67,7 @@ function App() {
         <main className="container mx-auto p-6">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/about" element={<div>About Us — College Event Management</div>} />
+            <Route path="/about" element={<div className="card">About Us — College Event Management</div>} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
@@ -76,6 +77,8 @@ function App() {
             <Route path="/student-dashboard" element={<DashboardStudent />} />
             <Route path="/admin-dashboard" element={<DashboardAdmin />} />
             <Route path="/teacher-dashboard" element={<DashboardTeacher />} />
+            <Route path="/contact" element={<div className="card">Contact — Reach us at events@college.edu</div>} />
+            <Route path="/privacy" element={<div className="card">Privacy — Your data is handled securely.</div>} />
           </Routes>
         </main>
         <footer className="footer">

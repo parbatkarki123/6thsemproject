@@ -79,7 +79,7 @@ export async function getStudentCertificates(){
 }
 
 export async function downloadCertificate(certId){
-  return api.get(`/api/student/certificates/${certId}/download`)
+  return api.get(`/api/student/certificates/${certId}/download`, { responseType: 'blob' })
 }
 
 export async function submitFeedback(payload){
