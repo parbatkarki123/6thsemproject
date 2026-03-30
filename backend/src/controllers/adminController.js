@@ -508,18 +508,13 @@ export async function uploadGalleryImage(req, res) {
 export async function getGalleryImages(req, res) {
   try {
     const images = await prisma.galleryImage.findMany({
-      orderBy: { createdAt: 'desc' },
-      include: {
-        uploadedByUser: {
-          select: { id: true, name: true, role: true }
-        }
-      }
+      orderBy: { createdAt: 'desc' }
     })
 
     return res.json({ images })
   } catch (err) {
-    console.error(err)
-    return res.status(500).json({ error: 'Internal server error' })
+    console.error('Gallery Fetch Error:', err)
+    return res.status(500).json({ error: 'Internal server error', details: err.message })
   }
 }
 

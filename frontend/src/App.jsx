@@ -11,6 +11,7 @@ import DashboardStudent from './pages/DashboardStudent.jsx'
 import DashboardAdmin from './pages/DashboardAdmin.jsx'
 import DashboardTeacher from './pages/DashboardTeacher.jsx'
 import Gallery from './pages/Gallery.jsx'
+import About from './pages/About.jsx'
 
 function App() {
   const [isAuthed, setIsAuthed] = useState(Boolean(getToken()))
@@ -67,7 +68,7 @@ function App() {
         <main className="container mx-auto p-6">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/about" element={<div className="card">About Us — College Event Management</div>} />
+            <Route path="/about" element={<About />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
@@ -81,18 +82,6 @@ function App() {
             <Route path="/privacy" element={<div className="card">Privacy — Your data is handled securely.</div>} />
           </Routes>
         </main>
-        <footer className="footer">
-          <div className="container">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-3">
-              <div className="text-sm text-gray-600">© {new Date().getFullYear()} College Event Management</div>
-              <div className="flex gap-4 text-sm">
-                <Link to="/about" className="text-gray-600">About</Link>
-                <Link to="/contact" className="text-gray-600">Contact</Link>
-                <Link to="/privacy" className="text-gray-600">Privacy</Link>
-              </div>
-            </div>
-          </div>
-        </footer>
       </div>
 
   )

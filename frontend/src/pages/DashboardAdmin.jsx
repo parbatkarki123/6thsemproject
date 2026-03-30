@@ -365,6 +365,7 @@ function AdminGalleryManager({ refreshKey }){
               <div>
                 {image.title && <p className="text-sm font-semibold">{image.title}</p>}
                 {image.description && <p className="text-xs text-gray-600">{image.description}</p>}
+                {image.uploadedByUser && <p className="text-[10px] text-gray-400 italic">By: {image.uploadedByUser.name}</p>}
               </div>
               <button className="btn btn-danger" onClick={()=>handleDelete(image.id)}>Delete</button>
             </div>
