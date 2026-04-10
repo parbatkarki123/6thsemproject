@@ -36,16 +36,16 @@ export async function loginAdmin(payload){
   return api.post('/api/auth/admin/login', payload)
 }
 
-export function saveToken(token, role = null){
+export function saveToken(token, userDetails = {}){
   localStorage.setItem('auth_token', token)
-  if (role) localStorage.setItem('user_role', role)
+  localStorage.setItem('user_details', JSON.stringify(userDetails))
   api.defaults.headers.common.Authorization = `Bearer ${token}`
   try{ window.dispatchEvent(new Event('authChange')) }catch(e){}
 }
 
 export function clearToken(){
   localStorage.removeItem('auth_token')
-  localStorage.removeItem('user_role')
+  localStorage.removeItem('user_details')
   delete api.defaults.headers.common.Authorization
   try{ window.dispatchEvent(new Event('authChange')) }catch(e){}
 }
@@ -54,8 +54,14 @@ export function getToken(){
   return localStorage.getItem('auth_token')
 }
 
+export function getUserDetails(){
+  const details = localStorage.getItem('user_details')
+  return details ? JSON.parse(details) : null
+}
+
 export function getRole(){
-  return localStorage.getItem('user_role')
+  const details = getUserDetails()
+  return details ? details.role : null
 }
 
 export default api

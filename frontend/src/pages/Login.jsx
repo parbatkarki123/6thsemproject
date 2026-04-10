@@ -20,9 +20,9 @@ export default function Login(){
       else resp = await loginAdmin({email, password})
 
       if(resp?.data?.token) {
-        saveToken(resp.data.token, resp.data.user?.role)
+        saveToken(resp.data.token, resp.data.user) // Pass the full user object
       }
-      navigate('/')
+      navigate(role === 'student' ? '/student-dashboard' : role === 'teacher' ? '/teacher-dashboard' : '/admin-dashboard')
     }catch(err){
       setError(err.response?.data?.message || err.response?.data?.error || String(err))
     }
